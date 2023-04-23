@@ -6,8 +6,9 @@ namespace cardholders.Models
 {
     public class Cardholder
     {
-        [Key]
-        public int id { get; set; }
+        // [Key]
+        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        // public int id { get; set; }
         
         [Required]
         [MaxLength(50)]

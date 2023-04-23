@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using cardholders.Models;
+using cardholders.Services.CardholderService;
+// using cardholders.Models;
 
 
 
@@ -10,31 +11,36 @@ namespace cardholders.Controllers
     [ApiController]
     public class CardholderController : ControllerBase
     {
-        private static List<Cardholder> cardholders = new List<Cardholder>{
-                new Cardholder {id = 1,name = "Shan Siriwardana",cardNumber = "111111111111",cvc = "111",expiryDate = "12/23"}
-        };
+       
+        private readonly ICardholderService _cardholderService;
+
+        public CardholderController(ICardholderService cardholderService)
+        {
+            _cardholderService = cardholderService;
+        }
 
         [HttpGet("cardholders")]
         public async Task<ActionResult<List<Cardholder>>> GetCardholders()
         {
-            return Ok(cardholders);
+            var result = _cardholderService.GetCardholders();
+            return Ok(result);
         }
 
-        [HttpGet("cardholder/{id}")]
-        public async Task<ActionResult<Cardholder>> GetSingleCardholder(int id)
+        [HttpGet("cardholder/{name}")]
+        public async Task<ActionResult<Cardholder>> GetSingleCardholder(string name)
         {
-            var cardholder = cardholders.Find(x => x.id == id);
-
-            if(cardholder is null)
-                return NotFound("Cardholder does not exist.");
-            return Ok(cardholder);
+            var result = _cardholderService.GetSingleCardholder(name);
+            if (result is null)
+                return NotFound("cardholder not found");
+            
+            return Ok(result);
         }
 
         [HttpPost("cardholder")]
         public async Task<ActionResult<List<Cardholder>>> CreateCardholder(Cardholder cardholder)
         {
-            cardholders.Add(cardholder);
-            return Ok(cardholders);
+            var result = _cardholderService.CreateCardholder(cardholder);
+            return Ok(result);
         }
     }
 }
