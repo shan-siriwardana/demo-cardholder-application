@@ -1,32 +1,32 @@
+using cardholders.Data;
+
 namespace cardholders.Services.CardholderService
 {
     public class CardholderService : ICardholderService
     {
+        private readonly DataContext _context;
 
-         private static List<Cardholder> cardholders = new List<Cardholder>{
-                new Cardholder {name = "Shan Siriwardana",cardNumber = "111111111111",cvc = "111",expiryDate = "12/23"}
-        };
-
-        //  private static List<Cardholder> cardholders = new List<Cardholder>{
-        //         new Cardholder {id = 1,name = "Shan Siriwardana",cardNumber = "111111111111",cvc = "111",expiryDate = "12/23"}
-        // };
-
-
-        public List<Cardholder> CreateCardholder(Cardholder cardholder)
+        public CardholderService(DataContext context)
         {
-            cardholders.Add(cardholder);
+            _context = context;
+        }
+
+        public async Task<List<Cardholder>> CreateCardholder(Cardholder cardholder)
+        {
+            _context.Cardholders.Add(cardholder);
+            await _context.SaveChangesAsync();
+            return await _context.Cardholders.ToListAsync();
+        }
+
+        public async Task<List<Cardholder>> GetCardholders()
+        {
+            var cardholders = await _context.Cardholders.ToListAsync();
             return cardholders;
         }
 
-        public List<Cardholder> GetCardholders()
+        public async Task<Cardholder?> GetSingleCardholder(string name)
         {
-            return cardholders;
-        }
-
-        public Cardholder GetSingleCardholder(string name)
-        {
-            
-            var cardholder = cardholders.Find(x => x.name == name);
+            var cardholder = await _context.Cardholders.FirstOrDefaultAsync(c => c.name == name);
 
             if(cardholder is null)
                 return null;

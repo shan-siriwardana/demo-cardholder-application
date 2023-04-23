@@ -22,14 +22,14 @@ namespace cardholders.Controllers
         [HttpGet("cardholders")]
         public async Task<ActionResult<List<Cardholder>>> GetCardholders()
         {
-            var result = _cardholderService.GetCardholders();
+            var result = await _cardholderService.GetCardholders();
             return Ok(result);
         }
 
         [HttpGet("cardholder/{name}")]
         public async Task<ActionResult<Cardholder>> GetSingleCardholder(string name)
         {
-            var result = _cardholderService.GetSingleCardholder(name);
+            var result = await _cardholderService.GetSingleCardholder(name);
             if (result is null)
                 return NotFound("cardholder not found");
             
@@ -39,7 +39,7 @@ namespace cardholders.Controllers
         [HttpPost("cardholder")]
         public async Task<ActionResult<List<Cardholder>>> CreateCardholder(Cardholder cardholder)
         {
-            var result = _cardholderService.CreateCardholder(cardholder);
+            var result = await _cardholderService.CreateCardholder(cardholder);
             return Ok(result);
         }
     }

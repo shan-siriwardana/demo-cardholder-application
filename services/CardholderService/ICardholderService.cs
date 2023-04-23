@@ -2,8 +2,8 @@ namespace cardholders.Services.CardholderService
 {
     public interface ICardholderService
     {
-        List<Cardholder> GetCardholders();
-        Cardholder? GetSingleCardholder(string name);
-        List<Cardholder> CreateCardholder(Cardholder cardholder);
+        Task<List<Cardholder>> GetCardholders();
+        Task<Cardholder?> GetSingleCardholder(string name);
+        Task<List<Cardholder>> CreateCardholder(Cardholder cardholder);
     }
 }
